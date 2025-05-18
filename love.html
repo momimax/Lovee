@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Do You Love Me?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: all 0.5s;
+            overflow: hidden;
+            touch-action: manipulation; /* مهم للجوال */
+        }
+        h1 {
+            color: #d32f2f;
+            font-size: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+        .btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            margin: 15px;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            -webkit-tap-highlight-color: transparent; /* إزالة تأثير الضغط على الجوال */
+        }
+        #yes {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            font-weight: bold;
+        }
+        #yes:hover, #yes:active {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        #no {
+            background: linear-gradient(45deg, #f44336, #FF5252);
+            color: white;
+            font-weight: bold;
+            position: absolute;
+        }
+        #message {
+            font-size: 100px;
+            color: #d32f2f;
+            font-weight: bold;
+            display: none;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            animation: heartbeat 1.5s infinite, zoomIn 1s;
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 0, 0, 0.6);
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    <h1 id="question">Do you love me?</h1>
+    <div id="buttons">
+        <button class="btn" id="yes">YES</button>
+        <button class="btn" id="no">NO</button>
+    </div>
+    <div id="message">Mee Tooooo❤️💕❤️</div>
+
+    <script>
+        const noBtn = document.getElementById('no');
+        const yesBtn = document.getElementById('yes');
+        const question = document.getElementById('question');
+        const message = document.getElementById('message');
+        const heartsContainer = document.getElementById('hearts');
+        
+        // جعل الزر NO يهرب عند اللمس (للجوال) أو تحويم الماوس (للكمبيوتر)
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // لمنع ظهور رسالة المتصفح
+            moveButton();
+        });
+
+        function moveButton() {
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+        
+        // إذا ضغط YES
+        yesBtn.addEventListener('click', () => {
+            question.style.display = 'none';
+            document.getElementById('buttons').style.display = 'none';
+            message.style.display = 'block';
+            document.body.style.background = "linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%)";
+            
+            // إضافة قلوب متحركة
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 4000);
+            }, 300);
+        });
+        
+        // إذا حاول يضغط NO (رغم الهروب)
+        noBtn.addEventListener('click', (e) => {
+            if (e.type === 'touchstart') {
+                e.preventDefault(); // لمنع الضغط باللمس
+            }
+        });
+    </script>
+</body>
+</html>
